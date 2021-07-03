@@ -3,15 +3,16 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table("user")
  * @ORM\Entity
  * @UniqueEntity("email")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ *
  * @method string getUserIdentifier()
  */
 class User implements UserInterface
@@ -40,6 +41,11 @@ class User implements UserInterface
      * @Assert\Email(message="Le format de l'adresse n'est pas correcte.")
      */
     private $email;
+
+//    public function __call(string $name, array $arguments)
+//    {
+//        // TODO: Implement @method string getUserIdentifier()
+//    }
 
     public function getId()
     {
@@ -83,15 +89,15 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return ['ROLE_USER'];
     }
 
+    /**
+     * @see UserInterface
+     */
     public function eraseCredentials()
     {
-    }
-
-    public function __call(string $name, array $arguments)
-    {
-        // TODO: Implement @method string getUserIdentifier()
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }
