@@ -46,9 +46,15 @@ class AppFixtures extends Fixture
     {
         for ($i = 0; $i < 25; ++$i) {
             $user = new User();
-            $user->setUsername($this->faker->userName);
-            $user->setEmail($this->faker->email);
-            $user->setPassword($this->passwordHasher->hashPassword($user, $this->faker->password(1, 64)));
+            if (0 === $i) {
+                $user->setUsername('user');
+                $user->setEmail('user@example.com');
+                $user->setPassword($this->passwordHasher->hashPassword($user, 'user1234'));
+            } else {
+                $user->setUsername($this->faker->userName);
+                $user->setEmail($this->faker->email);
+                $user->setPassword($this->passwordHasher->hashPassword($user, $this->faker->password(1, 64)));
+            }
             $this->users[] = $user;
             $manager->persist($user);
         }
