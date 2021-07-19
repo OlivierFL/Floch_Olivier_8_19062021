@@ -73,9 +73,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->getUserIdentifier();
     }
 
-    public function setUsername($username)
+    public function setUsername($username): self
     {
         $this->username = $username;
+
+        return $this;
     }
 
     public function getSalt()
@@ -88,9 +90,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword($password)
+    public function setPassword($password): self
     {
         $this->password = $password;
+
+        return $this;
     }
 
     public function getEmail()
@@ -98,9 +102,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail($email)
+    public function setEmail($email): self
     {
         $this->email = $email;
+
+        return $this;
     }
 
     public function getRoles()
@@ -110,9 +116,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($this->roles);
     }
 
-    public function setRoles(array $roles)
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
     }
 
     /**

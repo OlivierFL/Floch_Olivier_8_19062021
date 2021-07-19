@@ -32,6 +32,17 @@ class AppFixtures extends Fixture
 
     private function loadTasks(ObjectManager $manager): void
     {
+        // Generating 10 tasks without User
+        for ($i = 0; $i < 10; ++$i) {
+            $task = new Task();
+            $task->setTitle($this->faker->text());
+            $task->setContent($this->faker->sentences(1, true));
+            $task->setCreatedAt($this->faker->dateTime('now', 'Europe/Paris'));
+            $task->setUser(null);
+            $manager->persist($task);
+        }
+
+        // Generating 25 tasks with User
         for ($i = 0; $i < 25; ++$i) {
             $task = new Task();
             $task->setTitle($this->faker->text());
