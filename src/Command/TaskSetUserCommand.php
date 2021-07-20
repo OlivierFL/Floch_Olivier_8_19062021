@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\User;
 use App\Repository\TaskRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -22,8 +23,12 @@ class TaskSetUserCommand extends Command
     /**
      * TaskSetUserCommand constructor.
      */
-    public function __construct(private TaskRepository $repository, private EntityManagerInterface $entityManager, private UserPasswordHasherInterface $passwordHasher)
-    {
+    public function __construct(
+        private TaskRepository $taskRepository,
+        private UserRepository $userRepository,
+        private EntityManagerInterface $entityManager,
+        private UserPasswordHasherInterface $passwordHasher
+    ) {
         parent::__construct();
     }
 
@@ -32,7 +37,7 @@ class TaskSetUserCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $progressBar = new ProgressBar($output);
 
-        $tasksWithoutUser = $this->repository->findBy(['user' => null]);
+        $tasksWithoutUser = $this->taskRepository->findBy(['user' => null]);
 
         if (!$tasksWithoutUser) {
             $io->info('No Tasks without User have been found');
@@ -40,14 +45,19 @@ class TaskSetUserCommand extends Command
             return Command::SUCCESS;
         }
 
-        $anonymousUser = (new User())
-            ->setUsername('anonyme')
-            ->setEmail('anonyme@example.com')
-        ;
+        $anonymousUser = $this->userRepository->findOneBy(['username' => 'anonyme']);
 
-        $anonymousUser->setPassword($this->passwordHasher->hashPassword($anonymousUser, 'anonyme1234'));
+        if (!$anonymousUser) {
+            $io->info('No anonymous User found, creating new anonymous User');
 
-        $this->entityManager->persist($anonymousUser);
+            $anonymousUser = (new User())
+                ->setUsername('anonyme')
+                ->setEmail('anonyme@example.com')
+            ;
+            $anonymousUser->setPassword($this->passwordHasher->hashPassword($anonymousUser, 'anonyme1234'));
+
+            $this->entityManager->persist($anonymousUser);
+        }
 
         foreach ($progressBar->iterate($tasksWithoutUser) as $task) {
             $task->setUser($anonymousUser);
