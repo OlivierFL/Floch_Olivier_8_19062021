@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * @ORM\EntityListeners({"App\Doctrine\TaskSetUserListener"})
  * @ORM\Entity
  * @ORM\Table
  * @ORM\Entity(repositoryClass="App\Repository\TaskRepository")
@@ -40,6 +42,11 @@ class Task
      * @ORM\Column(type="boolean")
      */
     private $isDone;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tasks")
+     */
+    private $user;
 
     public function __construct()
     {
@@ -90,5 +97,15 @@ class Task
     public function toggle($flag)
     {
         $this->isDone = $flag;
+    }
+
+    public function getUser(): ?UserInterface
+    {
+        return $this->user;
+    }
+
+    public function setUser(?UserInterface $user)
+    {
+        $this->user = $user;
     }
 }
