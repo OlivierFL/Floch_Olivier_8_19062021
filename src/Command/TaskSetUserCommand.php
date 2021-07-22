@@ -45,14 +45,14 @@ class TaskSetUserCommand extends Command
             return Command::SUCCESS;
         }
 
-        $anonymousUser = $this->userRepository->findOneBy(['username' => 'anonyme']);
+        $anonymousUser = $this->userRepository->findOneBy(['email' => User::ANONYMOUS_USER_EMAIL]);
 
         if (!$anonymousUser) {
             $io->info('No anonymous User found, creating new anonymous User');
 
             $anonymousUser = (new User())
                 ->setUsername('anonyme')
-                ->setEmail('anonyme@example.com')
+                ->setEmail(User::ANONYMOUS_USER_EMAIL)
             ;
             $anonymousUser->setPassword($this->passwordHasher->hashPassword($anonymousUser, 'anonyme1234'));
 
