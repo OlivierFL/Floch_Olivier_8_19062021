@@ -18,6 +18,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    public const ANONYMOUS_USER_EMAIL = 'anonyme@example.com';
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -60,7 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier()
     {
-        return $this->username;
+        return $this->email;
     }
 
     public function getId()
@@ -70,7 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUsername()
     {
-        return $this->getUserIdentifier();
+        return $this->username;
     }
 
     public function setUsername($username): self
@@ -99,7 +101,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getEmail()
     {
-        return $this->email;
+        return $this->getUserIdentifier();
     }
 
     public function setEmail($email): self
@@ -111,9 +113,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles()
     {
-        $this->roles[] = 'ROLE_USER';
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
 
-        return array_unique($this->roles);
+        return array_unique($roles);
     }
 
     public function setRoles(array $roles): self
