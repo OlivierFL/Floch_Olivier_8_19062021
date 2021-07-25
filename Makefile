@@ -15,12 +15,16 @@ db-reset:
 	symfony console doctrine:schema:create
 	symfony console doctrine:fixtures:load -n
 
-.PHONY: tests
-tests:
+.PHONY: tests-db-reset
+tests-db-reset:
 	APP_ENV=test symfony console doctrine:database:drop --force || true
 	APP_ENV=test symfony console doctrine:database:create
 	APP_ENV=test symfony console doctrine:schema:create
 	APP_ENV=test symfony console doctrine:fixtures:load -n
+
+.PHONY: tests
+tests:
+	make tests-db-reset
 	APP_ENV=test symfony php bin/phpunit --colors
 
 .PHONY: tests-no-reset
@@ -29,10 +33,7 @@ tests-no-reset:
 
 .PHONY: tests-entity
 tests-entity:
-	APP_ENV=test symfony console doctrine:database:drop --force || true
-	APP_ENV=test symfony console doctrine:database:create
-	APP_ENV=test symfony console doctrine:schema:create
-	APP_ENV=test symfony console doctrine:fixtures:load -n
+	make tests-db-reset
 	APP_ENV=test symfony php bin/phpunit tests/Entity --colors
 
 .PHONY: tests-entity-no-reset
@@ -41,10 +42,7 @@ tests-entity-no-reset:
 
 .PHONY: tests-functional
 tests-functional:
-	APP_ENV=test symfony console doctrine:database:drop --force || true
-	APP_ENV=test symfony console doctrine:database:create
-	APP_ENV=test symfony console doctrine:schema:create
-	APP_ENV=test symfony console doctrine:fixtures:load -n
+	make tests-db-reset
 	APP_ENV=test symfony php bin/phpunit tests/Controller --colors
 
 .PHONY: tests-functional-no-reset
@@ -53,10 +51,7 @@ tests-functional-no-reset:
 
 .PHONY: tests-coverage
 tests-coverage:
-	APP_ENV=test symfony console doctrine:database:drop --force || true
-	APP_ENV=test symfony console doctrine:database:create
-	APP_ENV=test symfony console doctrine:schema:create
-	APP_ENV=test symfony console doctrine:fixtures:load -n
+	make tests-db-reset
 	APP_ENV=test symfony php bin/phpunit --colors --coverage-html tests-coverage
 
 .PHONY: tests-coverage-no-reset

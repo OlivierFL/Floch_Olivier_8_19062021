@@ -2,9 +2,15 @@
 
 namespace Tests\Controller;
 
+use App\Entity\User;
+use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class TaskControllerTest extends WebTestCase
 {
@@ -13,7 +19,7 @@ class TaskControllerTest extends WebTestCase
     public const TASKS_EDIT = '/tasks/1/edit';
     public const TASKS_TOGGLE = '/tasks/1/toggle';
     public const TASKS_DELETE = '/tasks/1/delete';
-    public const TASKS_DELETE_DENIED = '/tasks/37/delete';
+    public const TASKS_DELETE_DENIED = '/tasks/36/delete';
     public const TASKS_DELETE_ANONYMOUS = '/tasks/2/delete';
     public const ADD_TASK_BUTTON = 'Ajouter';
     public const EDIT_TASK_BUTTON = 'Modifier';
@@ -25,7 +31,7 @@ class TaskControllerTest extends WebTestCase
         $crawler = $client->request('GET', self::TASKS_LIST);
         self::assertResponseIsSuccessful();
         self::assertPageTitleSame('Welcome!');
-        self::assertCount(37, $crawler->filter('.thumbnail'), 'Tasks list is accessible to logged in users, and has 37 tasks by default');
+        self::assertCount(36, $crawler->filter('.thumbnail'), 'Tasks list is accessible to logged in users, and has 36 tasks by default');
     }
 
     public function testTasksListUserNotLoggedIn(): void
@@ -87,7 +93,7 @@ class TaskControllerTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertRouteSame('task_list');
         self::assertStringContainsString('<strong>Superbe !</strong> La tâche a bien été ajoutée.', $client->getResponse()->getContent(), 'Task is created successfully, user is redirected to tasks list page, flash message is visible');
-        self::assertCount(38, $crawler->filter('.thumbnail'), 'New Task is added to the Tasks list');
+        self::assertCount(37, $crawler->filter('.thumbnail'), 'New Task is added to the Tasks list');
     }
 
     public function testUserCanEditTask(): void
@@ -203,9 +209,15 @@ class TaskControllerTest extends WebTestCase
         self::assertResponseStatusCodeSame(403, 'User can not delete other User\'s Task');
     }
 
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
     public function testAdminCanDeleteAnonymousUserTask(): void
     {
         $client = $this->createAuthenticatedClient();
+        $anonymousUser = $this->createAnonymousUser();
+        $this->linkAnonymousUserToTask($anonymousUser);
 
         $client->request('GET', self::TASKS_DELETE_ANONYMOUS);
 
@@ -245,5 +257,38 @@ class TaskControllerTest extends WebTestCase
         $client->loginUser($user);
 
         return $client;
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
+    private function createAnonymousUser(): User
+    {
+        $passwordHasher = self::getContainer()->get(UserPasswordHasherInterface::class);
+
+        $anonymousUser = (new User())
+            ->setUsername('anonyme')
+            ->setEmail(User::ANONYMOUS_USER_EMAIL)
+        ;
+        $anonymousUser->setPassword($passwordHasher->hashPassword($anonymousUser, 'anonyme1234'));
+
+        $manager = self::getContainer()->get(EntityManagerInterface::class);
+        $manager->persist($anonymousUser);
+
+        return $anonymousUser;
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
+    private function linkAnonymousUserToTask(User $user, int $taskId = 2): void
+    {
+        $taskRepository = self::getContainer()->get(TaskRepository::class);
+        $task = $taskRepository->findOneBy(['id' => $taskId]);
+        $task->setUser($user);
+        $manager = self::getContainer()->get(EntityManagerInterface::class);
+        $manager->persist($task);
     }
 }

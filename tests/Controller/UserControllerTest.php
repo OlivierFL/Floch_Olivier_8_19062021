@@ -59,7 +59,7 @@ class UserControllerTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertRouteSame('user_list');
         self::assertStringContainsString('<strong>Superbe !</strong> L&#039;utilisateur a bien été ajouté.', $client->getResponse()->getContent(), 'User is created successfully, admin is redirected to Users list page, flash message is visible');
-        self::assertCount(29, $crawler->filter('tr'), 'New User is added to the Users list');
+        self::assertCount(28, $crawler->filter('tr'), 'New User is added to the Users list');
     }
 
     public function testCreateUserAlreadyExists(): void

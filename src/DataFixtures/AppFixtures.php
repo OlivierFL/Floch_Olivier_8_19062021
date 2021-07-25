@@ -42,16 +42,6 @@ class AppFixtures extends Fixture
         $testTask->setUser($this->admin);
         $manager->persist($testTask);
 
-        // Generating Task with Anonymous User for tests
-        $anonymousUser = $this->getAnonymousUser();
-        $manager->persist($anonymousUser);
-        $anonymousUserTestTask = new Task();
-        $anonymousUserTestTask->setTitle('Tâche de test utilisateur anonyme');
-        $anonymousUserTestTask->setContent('Contenu Tâche de test utilisateur anonyme');
-        $anonymousUserTestTask->setCreatedAt($this->faker->dateTime('now', self::TIMEZONE));
-        $anonymousUserTestTask->setUser($anonymousUser);
-        $manager->persist($anonymousUserTestTask);
-
         // Generating 10 tasks without User
         for ($i = 0; $i < 10; ++$i) {
             $task = new Task();
@@ -105,16 +95,5 @@ class AppFixtures extends Fixture
     private function getRandomUser(): User
     {
         return $this->users[array_rand($this->users)];
-    }
-
-    private function getAnonymousUser(): User
-    {
-        $anonymousUser = (new User())
-            ->setUsername('anonyme')
-            ->setEmail(User::ANONYMOUS_USER_EMAIL)
-        ;
-        $anonymousUser->setPassword($this->passwordHasher->hashPassword($anonymousUser, 'anonyme1234'));
-
-        return $anonymousUser;
     }
 }
