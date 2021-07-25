@@ -8,6 +8,13 @@ down:
 	@symfony server:stop
 	@docker-compose down
 
+.PHONY: db-reset
+db-reset:
+	symfony console doctrine:database:drop --force || true
+	symfony console doctrine:database:create
+	symfony console doctrine:schema:create
+	symfony console doctrine:fixtures:load -n
+
 .PHONY: tests
 tests:
 	APP_ENV=test symfony console doctrine:database:drop --force || true
@@ -16,12 +23,20 @@ tests:
 	APP_ENV=test symfony console doctrine:fixtures:load -n
 	APP_ENV=test symfony php bin/phpunit --colors
 
+.PHONY: tests-no-reset
+tests-no-reset:
+	APP_ENV=test symfony php bin/phpunit --colors
+
 .PHONY: tests-coverage
 tests-coverage:
 	APP_ENV=test symfony console doctrine:database:drop --force || true
 	APP_ENV=test symfony console doctrine:database:create
 	APP_ENV=test symfony console doctrine:schema:create
 	APP_ENV=test symfony console doctrine:fixtures:load -n
+	APP_ENV=test symfony php bin/phpunit --colors --coverage-html tests-coverage
+
+.PHONY: tests-coverage-no-reset
+tests-coverage-no-reset:
 	APP_ENV=test symfony php bin/phpunit --colors --coverage-html tests-coverage
 
 .PHONY: analyze
