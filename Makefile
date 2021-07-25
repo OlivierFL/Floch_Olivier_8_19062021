@@ -27,6 +27,30 @@ tests:
 tests-no-reset:
 	APP_ENV=test symfony php bin/phpunit --colors
 
+.PHONY: tests-entity
+tests-entity:
+	APP_ENV=test symfony console doctrine:database:drop --force || true
+	APP_ENV=test symfony console doctrine:database:create
+	APP_ENV=test symfony console doctrine:schema:create
+	APP_ENV=test symfony console doctrine:fixtures:load -n
+	APP_ENV=test symfony php bin/phpunit tests/Entity --colors
+
+.PHONY: tests-entity-no-reset
+tests-entity-no-reset:
+	APP_ENV=test symfony php bin/phpunit tests/Entity --colors
+
+.PHONY: tests-functional
+tests-functional:
+	APP_ENV=test symfony console doctrine:database:drop --force || true
+	APP_ENV=test symfony console doctrine:database:create
+	APP_ENV=test symfony console doctrine:schema:create
+	APP_ENV=test symfony console doctrine:fixtures:load -n
+	APP_ENV=test symfony php bin/phpunit tests/Controller --colors
+
+.PHONY: tests-functional-no-reset
+tests-functional-no-reset:
+	APP_ENV=test symfony php bin/phpunit tests/Controller --colors
+
 .PHONY: tests-coverage
 tests-coverage:
 	APP_ENV=test symfony console doctrine:database:drop --force || true
