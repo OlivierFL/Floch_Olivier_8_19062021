@@ -11,6 +11,14 @@ class UserControllerTest extends WebTestCase
     public const USERS_LIST = '/users';
     public const USERS_CREATE = '/users/create';
     public const USERS_EDIT = '/users/2/edit';
+    public const USER_TEST_PASSWORD = 'usertest1234';
+    public const USER_TEST_USERNAME = 'User test';
+    public const USER_TEST_EMAIL = 'test@example.com';
+    public const ADMIN_EMAIL = 'admin@example.com';
+    public const USER_EMAIL = 'user@example.com';
+    public const USER_PASSWORD = 'user1234';
+    public const ADD_USER_BUTTON = 'Ajouter';
+    public const EDIT_USER_BUTTON = 'Modifier';
 
     public function testAdminCanAccessUsersList(): void
     {
@@ -38,12 +46,12 @@ class UserControllerTest extends WebTestCase
 
         $client->request('GET', self::USERS_CREATE);
 
-        $password = 'usertest1234';
-        $client->submitForm('Ajouter', [
-            'user[username]' => 'Test User',
+        $password = self::USER_TEST_PASSWORD;
+        $client->submitForm(self::ADD_USER_BUTTON, [
+            'user[username]' => self::USER_TEST_USERNAME,
             'user[password][first]' => $password,
             'user[password][second]' => $password,
-            'user[email]' => 'test@example.com',
+            'user[email]' => self::USER_TEST_EMAIL,
         ]);
 
         $crawler = $client->followRedirect();
@@ -54,14 +62,121 @@ class UserControllerTest extends WebTestCase
         self::assertCount(29, $crawler->filter('tr'), 'New User is added to the Users list');
     }
 
+    public function testCreateUserAlreadyExists(): void
+    {
+        $client = $this->createAuthenticatedClient();
+
+        $client->request('GET', self::USERS_CREATE);
+
+        $password = self::USER_TEST_PASSWORD;
+        $client->submitForm(self::ADD_USER_BUTTON, [
+            'user[username]' => self::USER_TEST_USERNAME,
+            'user[password][first]' => $password,
+            'user[password][second]' => $password,
+            'user[email]' => self::USER_EMAIL,
+        ]);
+
+        self::assertRouteSame('user_create');
+        self::assertStringContainsString('This value is already used.', $client->getResponse()->getContent(), 'User email already exists in database, an error message is shown');
+    }
+
+    public function testCreateUserInvalidUserName(): void
+    {
+        $client = $this->createAuthenticatedClient();
+
+        $client->request('GET', self::USERS_CREATE);
+
+        $password = self::USER_TEST_PASSWORD;
+        $client->submitForm(self::ADD_USER_BUTTON, [
+            'user[username]' => '',
+            'user[password][first]' => $password,
+            'user[password][second]' => $password,
+            'user[email]' => self::USER_TEST_EMAIL,
+        ]);
+
+        self::assertRouteSame('user_create');
+        self::assertStringContainsString('Vous devez saisir un nom d&#039;utilisateur.', $client->getResponse()->getContent(), 'When username is empty, an error message is shown');
+    }
+
+    public function testCreateUserEmptyEmail(): void
+    {
+        $client = $this->createAuthenticatedClient();
+
+        $client->request('GET', self::USERS_CREATE);
+
+        $password = self::USER_TEST_PASSWORD;
+        $client->submitForm(self::ADD_USER_BUTTON, [
+            'user[username]' => self::USER_TEST_USERNAME,
+            'user[password][first]' => $password,
+            'user[password][second]' => $password,
+            'user[email]' => '',
+        ]);
+
+        self::assertRouteSame('user_create');
+        self::assertStringContainsString('Vous devez saisir une adresse email.', $client->getResponse()->getContent(), 'When email is empty, an error message is shown');
+    }
+
+    public function testCreateUserInvalidEmail(): void
+    {
+        $client = $this->createAuthenticatedClient();
+
+        $client->request('GET', self::USERS_CREATE);
+
+        $password = self::USER_TEST_PASSWORD;
+        $client->submitForm(self::ADD_USER_BUTTON, [
+            'user[username]' => self::USER_TEST_USERNAME,
+            'user[password][first]' => $password,
+            'user[password][second]' => $password,
+            'user[email]' => 'test',
+        ]);
+
+        self::assertRouteSame('user_create');
+        self::assertStringContainsString('Le format de l&#039;adresse n&#039;est pas correct.', $client->getResponse()->getContent(), 'When email is invalid, an error message is shown');
+    }
+
+    public function testCreateUserEmptyPassword(): void
+    {
+        $client = $this->createAuthenticatedClient();
+
+        $client->request('GET', self::USERS_CREATE);
+
+        $client->submitForm(self::ADD_USER_BUTTON, [
+            'user[username]' => self::USER_TEST_USERNAME,
+            'user[password][first]' => '',
+            'user[password][second]' => '',
+            'user[email]' => self::USER_TEST_EMAIL,
+        ]);
+
+        self::assertRouteSame('user_create');
+        self::assertStringContainsString('Vous devez saisir un mot de passe.', $client->getResponse()->getContent(), 'When email is invalid, an error message is shown');
+    }
+
+    public function testEditUserAlreadyExists(): void
+    {
+        $client = $this->createAuthenticatedClient();
+
+        $client->request('GET', self::USERS_EDIT);
+
+        $password = self::USER_PASSWORD;
+        $client->submitForm(self::EDIT_USER_BUTTON, [
+            'user[username]' => self::USER_TEST_USERNAME,
+            'user[password][first]' => $password,
+            'user[password][second]' => $password,
+            'user[email]' => self::ADMIN_EMAIL,
+        ]);
+
+        self::assertRouteSame('user_edit');
+        self::assertStringContainsString('This value is already used.', $client->getResponse()->getContent(), 'User email already exists in database, an error message is shown');
+    }
+
     public function testAdminCanEditUser(): void
     {
         $client = $this->createAuthenticatedClient();
 
         $client->request('GET', self::USERS_EDIT);
 
-        $password = 'usertest1234';
-        $client->submitForm('Modifier', [
+        $password = self::USER_TEST_PASSWORD;
+        $client->submitForm(self::EDIT_USER_BUTTON, [
             'user[username]' => 'Test User edited',
             'user[password][first]' => $password,
             'user[password][second]' => $password,
@@ -81,8 +196,8 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', self::USERS_EDIT);
 
-        $password = 'user1234';
-        $form = $crawler->selectButton('Modifier')->form();
+        $password = self::USER_PASSWORD;
+        $form = $crawler->selectButton(self::EDIT_USER_BUTTON)->form();
         $form->setValues([
             'user[password][first]' => $password,
             'user[password][second]' => $password,
@@ -110,9 +225,9 @@ class UserControllerTest extends WebTestCase
         $userRepository = self::getContainer()->get(UserRepository::class);
 
         if (!$isAdmin) {
-            $user = $userRepository->findOneBy(['email' => 'user@example.com']);
+            $user = $userRepository->findOneBy(['email' => self::USER_EMAIL]);
         } else {
-            $user = $userRepository->findOneBy(['email' => 'admin@example.com']);
+            $user = $userRepository->findOneBy(['email' => self::ADMIN_EMAIL]);
         }
 
         $client->loginUser($user);
