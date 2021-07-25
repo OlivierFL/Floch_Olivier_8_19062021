@@ -15,6 +15,8 @@ class TaskControllerTest extends WebTestCase
     public const TASKS_DELETE = '/tasks/1/delete';
     public const TASKS_DELETE_DENIED = '/tasks/37/delete';
     public const TASKS_DELETE_ANONYMOUS = '/tasks/2/delete';
+    public const ADD_TASK_BUTTON = 'Ajouter';
+    public const EDIT_TASK_BUTTON = 'Modifier';
 
     public function testTasksList(): void
     {
@@ -75,7 +77,7 @@ class TaskControllerTest extends WebTestCase
 
         $client->request('GET', self::TASKS_CREATE);
 
-        $client->submitForm('Ajouter', [
+        $client->submitForm(self::ADD_TASK_BUTTON, [
             'task[title]' => 'New task title',
             'task[content]' => 'New task content',
         ]);
@@ -104,6 +106,66 @@ class TaskControllerTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertRouteSame('task_list');
         self::assertStringContainsString('<strong>Superbe !</strong> La tâche a bien été modifiée.', $client->getResponse()->getContent(), 'Task is edited successfully, user is redirected to tasks list page, flash message is visible');
+    }
+
+    public function testCreateTaskEmptyTitle(): void
+    {
+        $client = $this->createAuthenticatedClient();
+
+        $client->request('GET', self::TASKS_CREATE);
+
+        $client->submitForm(self::ADD_TASK_BUTTON, [
+            'task[title]' => '',
+            'task[content]' => 'New task content',
+        ]);
+
+        self::assertRouteSame('task_create');
+        self::assertStringContainsString('Vous devez saisir un titre.', $client->getResponse()->getContent(), 'When task title is empty, an error message is shown');
+    }
+
+    public function testCreateTaskEmptyContent(): void
+    {
+        $client = $this->createAuthenticatedClient();
+
+        $client->request('GET', self::TASKS_CREATE);
+
+        $client->submitForm(self::ADD_TASK_BUTTON, [
+            'task[title]' => 'New task title',
+            'task[content]' => '',
+        ]);
+
+        self::assertRouteSame('task_create');
+        self::assertStringContainsString('Vous devez saisir du contenu.', $client->getResponse()->getContent(), 'When task content is empty, an error message is shown');
+    }
+
+    public function testEditTaskEmptyTitle(): void
+    {
+        $client = $this->createAuthenticatedClient();
+
+        $client->request('GET', self::TASKS_EDIT);
+
+        $client->submitForm(self::EDIT_TASK_BUTTON, [
+            'task[title]' => '',
+            'task[content]' => 'Edited task content',
+        ]);
+
+        self::assertRouteSame('task_edit');
+        self::assertStringContainsString('Vous devez saisir un titre.', $client->getResponse()->getContent(), 'When task title is empty, an error message is shown');
+    }
+
+    public function testEditTaskEmptyContent(): void
+    {
+        $client = $this->createAuthenticatedClient();
+
+        $client->request('GET', self::TASKS_EDIT);
+
+        $client->submitForm(self::EDIT_TASK_BUTTON, [
+            'task[title]' => 'Edited task title',
+            'task[content]' => '',
+        ]);
+
+        self::assertRouteSame('task_edit');
+        self::assertStringContainsString('Vous devez saisir du contenu.', $client->getResponse()->getContent(), 'When task content is empty, an error message is shown');
     }
 
     public function testUserCanToggleTaskStatus(): void
