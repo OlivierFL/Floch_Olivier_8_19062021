@@ -12,9 +12,11 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    private const TIMEZONE = 'Europe/Paris';
     private Generator $faker;
 
     private array $users = [];
+    private User $admin;
 
     public function __construct(private UserPasswordHasherInterface $passwordHasher)
     {
@@ -32,12 +34,20 @@ class AppFixtures extends Fixture
 
     private function loadTasks(ObjectManager $manager): void
     {
+        // Generating Task for tests
+        $testTask = new Task();
+        $testTask->setTitle('Titre Tâche de test');
+        $testTask->setContent('Contenu Tâche de test');
+        $testTask->setCreatedAt($this->faker->dateTime('now', self::TIMEZONE));
+        $testTask->setUser($this->admin);
+        $manager->persist($testTask);
+
         // Generating 10 tasks without User
         for ($i = 0; $i < 10; ++$i) {
             $task = new Task();
             $task->setTitle($this->faker->text());
             $task->setContent($this->faker->sentences(1, true));
-            $task->setCreatedAt($this->faker->dateTime('now', 'Europe/Paris'));
+            $task->setCreatedAt($this->faker->dateTime('now', self::TIMEZONE));
             $task->setUser(null);
             $manager->persist($task);
         }
@@ -47,7 +57,7 @@ class AppFixtures extends Fixture
             $task = new Task();
             $task->setTitle($this->faker->text());
             $task->setContent($this->faker->sentences(1, true));
-            $task->setCreatedAt($this->faker->dateTime('now', 'Europe/Paris'));
+            $task->setCreatedAt($this->faker->dateTime('now', self::TIMEZONE));
             $task->setUser($this->getRandomUser());
             $manager->persist($task);
         }
@@ -79,6 +89,7 @@ class AppFixtures extends Fixture
         $admin->setPassword($this->passwordHasher->hashPassword($admin, 'admin1234'));
         $admin->setRoles(['ROLE_ADMIN']);
         $manager->persist($admin);
+        $this->admin = $admin;
     }
 
     private function getRandomUser(): User
