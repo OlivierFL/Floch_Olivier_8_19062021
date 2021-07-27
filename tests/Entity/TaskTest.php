@@ -26,6 +26,21 @@ class TaskTest extends TestCase
         $this->assertEquals(false, $task->isDone());
     }
 
+    public function testTaskToggleIsDone(): void
+    {
+        $task = new Task();
+        $task->setTitle('Test title');
+        $task->setContent('Test content');
+
+        $this->assertEquals(false, $task->isDone());
+
+        $task->toggle(true);
+        $this->assertEquals(true, $task->isDone());
+
+        $task->toggle(!$task->isDone());
+        $this->assertEquals(false, $task->isDone());
+    }
+
     private function getDate(): DateTime
     {
         return new DateTime();
