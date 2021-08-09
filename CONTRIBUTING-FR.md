@@ -1,19 +1,23 @@
-# ToDo & Co - Contributing guide
+# ToDo & Co - Guide de contribution
 
-This file is for developers who want to contribute to the ToDo & Co project. Any contribution to this project is welcome !
+Ce guide est destiné aux développeurs souhaitant participer au projet ToDo & Co. Toutes les contributions à ce projet sont les bienvenues !
 
-But before creating any pull request, please read carefully this file, otherwise if you not follow the guidelines, new features or pull requests won't be approved or merged.
+Avant de faire une _pull request_, veuillez lire attentivement ce guide et ses différentes recommendations. Si celles-ci ne sont pas suivies, les nouvelles fonctionnalités ainsi que les _pull requests_ ne pourront être approuvées et fusionnées.
 <hr>
 
-## 1. Prerequisites
+<small>**Version en anglais disponible [ici](CONTRIBUTING-FR.md)**</small>
 
-The starting point for adding a contribution to the project, is to clone this repository, and install the project on your local development machine.
+<hr>
 
-Follow the [**README**](README.md) to install and run the project.
+## 1. Prérequis
+
+Afin de contribuer au projet, commencez par cloner le dépôt et installez le projet sur votre machine de développement.
+
+Le [**README**](README.md) détaille les étapes nécessaires à l'installation et au lancement du projet.
 
 ## 2. Workflow
 
-### 2.1 Create an issue
+### 2.1 Création d'une _issue_
 
 First, if you want to add a **new feature**, or to **fix a bug**, start by creating an [**issue**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/issues).
 
