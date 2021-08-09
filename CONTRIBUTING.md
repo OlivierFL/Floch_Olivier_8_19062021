@@ -53,6 +53,8 @@ When you installed the project, some tools to help you analyze and fix the code 
 
 Please run these tools regularly to fix some code smells, like missing _type hints_, format the code to follow _PSRs_, etc.
 
+As this project is built with the Symfony Framework, please follow the framework's [**best practices**](https://symfony.com/doc/current/best_practices.html).
+
 #### 2.2.3 Tests
 
 This project uses [**PHPUnit**](https://phpunit.de/) tu run tests.
@@ -65,9 +67,40 @@ It will also be appreciated that you add tests for the feature or bugfix you wor
 
 #### 2.2.4 Commit message convention
 
-When the feature is complete, you can commit the changes made, following the [**conventional commit**](https://www.conventionalcommits.org/en/v1.0.0/) convention :
+To easily track changes, or to rollback any change made to the codebase, don't forget to commit often and early, following the [**conventional commit**](https://www.conventionalcommits.org/en/v1.0.0/) convention :
 
 - `feat: <commit title>` for a new feature
 - `fix: <commit title>` for a bugfix
 
 ### 2.3 Pull Request
+
+When the feature or bugfix is done, you can make a pull request.
+
+Go to the [**Pull requests page**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/pulls), and click on the _New pull request_ button.
+
+On the _pull request_ creation page, you can add a title, and a description.
+
+In the _**description**_ field, don't forget to link the issue related to the current pull request. It is mandatory to automatically move the issue in the right column in the [**project board**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/projects/1). The syntax is : `Closes #<issue-id>`.
+
+And, same as creating an [issue](#21-create-an-issue), please fill the fields on the right of the page, to add the mandatory data, like the **_Reviewers_**, the **_Labels_**, etc.
+
+When the request is created, [**SonarCloud**](https://sonarcloud.io/dashboard?id=OlivierFL_Floch_Olivier_8_19062021) and [**CodeClimate**](https://codeclimate.com/github/OlivierFL/Floch_Olivier_8_19062021) analyses will run automatically.
+
+Please check that the results meet the following project requirements for code quality :
+- SonarCloud :
+    - Quality Gate passed
+    - 0 bugs
+    - 0 vulnerabilities
+    - 0 security hotspots
+    - 0 code smells
+    - 0% duplication
+- CodeClimate :
+    - 0 issues detected
+
+Otherwise, if any of these requirements are not met, **the pull request will not be approved and merged.** Please check and fix the issues, until all the checks pass.
+
+If all is green, and the pull request has been approved by the _reviewers_, the pull request can be merged.
+
+# 3. Thank you for contributing
+
+Thanks for reading this guide, we hope you can contribute and add new features to this project !
