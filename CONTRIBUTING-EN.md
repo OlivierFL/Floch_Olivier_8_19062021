@@ -61,7 +61,7 @@ As this project is built with the Symfony Framework, please follow the framework
 
 #### 2.2.3 Tests
 
-This project uses [**PHPUnit**](https://phpunit.de/) tu run tests.
+This project uses [**PHPUnit**](https://phpunit.de/) to run tests.
 
 In order to keep the project stable, and with the minimum of bugs, it's required to run the tests, and that **all** tests pass, before committing and pushing to the repository.
 

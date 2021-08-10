@@ -19,62 +19,62 @@ Le [**README**](README.md) détaille les étapes nécessaires à l'installation 
 
 ### 2.1 Création d'une _issue_
 
-First, if you want to add a **new feature**, or to **fix a bug**, start by creating an [**issue**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/issues).
+Pour ajouter une nouvelle fonctionnalité ou corriger un bug, commencez par créer une [**issue**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/issues).
 
-Add a descriptive title, and, if more precision is needed, add a more detailed description in the dedicated field.
+Ajoutez un titre, et, s'il y a besoin de plus de précisions, une description détaillée dans le champ correspondant.
 
-Don't forget to add yourself in the _**Assignees**_ field on the right, as well as the _**Labels**_ and _**Project**_.
+N'oubliez de vous ajouter dans le champ _**Assignees**_, et également de renseigner les _**Labels**_ et le _**Project**_.
 
-For example, for a new feature, add the **feature** _label_, and select **ToDo** in the _project_ field (this adds automatically the issue to the [**project board**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/projects/1), to track the issues statuses). 
+Par exemple, pour une nouvelle fonctionnalité, ajoutez le _label_ **feature**, et sélectionnez **ToDo** dans le champ _project_ (pour ajouter automatiquement l'_issue_ dans le [**project board**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/projects/1), afin de suivre le statut des _issues_).
 
-When the issue is created, you can move the issue to the **in progress** column of the [**project board**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/projects/1), so the other developers can see this issue is currently in development.
+Lorsque l'_issue_ est créée, veillez à déplacer celle-ci dans la colonne **in progress** du [**project board**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/projects/1), afin que les autres développeurs soient informés que la fonctionnalité est en cours de développement.
 
-### 2.2 Feature or bugfix development
+### 2.2 Développement d'une fonctionnalité ou correction d'un bug
 
-This project relies on **GIT** to track changes made to the project, and the project mainly follows the [**Git flow**](https://guides.github.com/introduction/flow/) for branch management.
+Le projet utilise sur **GIT** pour suivre les différents changements apportés au projet, et la gestion des branches est basée sur le [**Git flow**](https://guides.github.com/introduction/flow/).
 
-So every new feature or bugfix needs to be done on a new branch, created from the _**master**_ branch.
+Chaque nouvelle fonctionnalité ou correction de bug doit être faite sur une nouvelle branche, créée depuis la branche _**master**_.
 
-#### 2.2.1 Branch naming
+#### 2.2.1 Nommage des branches
 
-The project follows a simple naming convention for branches :
+Le projet suit une convention de nommage simple :
 
-- for a new feature : `feature/<issue-id>-<issue-title>`
-- for a bugfix : `bugfix/<issue-id>-<issue-title>`
+- pour une nouvelle fonctionnalité : `feature/<issue-id>-<issue-title>`
+- pour une correction de bug : `bugfix/<issue-id>-<issue-title>`
 
-Then, when the branch is created, you can start to add new code to develop the feature, or fix a bug.
+Lorsque la branche est créée, vous pouvez commencer le travail de développement.
 
-In order to keep the codebase clean, maintainable and bug free, the project follows some coding standards.
+Afin de conserver le code du projet le plus maintenable possible, et sans bugs, le code ajouté doit respecter certains standards.
 
-#### 2.2.2 Coding standards and quality
+#### 2.2.2 Qualité du code et standards
 
-The project follows the [**PSR-1**](https://www.php-fig.org/psr/psr-1/), [**PSR-4**](https://www.php-fig.org/psr/psr-4/) and [**PSR-12**](https://www.php-fig.org/psr/psr-12/) for the code formatting.
+Le projet suit les recommandations des [**PSR-1**](https://www.php-fig.org/psr/psr-1/), [**PSR-4**](https://www.php-fig.org/psr/psr-4/) and [**PSR-12**](https://www.php-fig.org/psr/psr-12/) pour le formatage du code.
 
-When you installed the project, some tools to help you analyze and fix the code formatting and standards were added :
+Lorsque vous avez installé le projet sur votre machine, des outils facilitant le respect de ces recommandations ont été ajoutées : 
 
-- [**phpstan**](https://phpstan.org/), a static code analysis tool, highlights errors in code, like missing _types hints_, etc.
-- [**Easy Coding Standard**](https://github.com/symplify/easy-coding-standard), a CLI tool that analyzes the code to find issues from a set of rules (based on _PHP Code Sniffer_ and _PHP CS Fixer_). The configuration is available in [`ecs.php`](ecs.php). The tool can be run in a terminal with `vendor/bin/ecs check src/` or `vendor/bin/ecs check src/ --fix` to fix code.
+- [**phpstan**](https://phpstan.org/), outil d'analyse statique du code, met en évidence les erreurs dans le code, par exemple le _typage des attributs_, etc.
+- [**Easy Coding Standard**](https://github.com/symplify/easy-coding-standard), outil en ligne de commande qui analyse le code pour trouver d'éventuelles erreurs, en se basant sur des règles prédéfinies (issues de _PHP Code Sniffer_ et _PHP CS Fixer_). La configuration est disponible dans le fichier [`ecs.php`](ecs.php). L'outil se lance depuis un terminal, avec `vendor/bin/ecs check src/` ou `vendor/bin/ecs check src/ --fix` pour corriger les erreurs.
 
-Please run these tools regularly to fix some code smells, like missing _type hints_, format the code to follow _PSRs_, etc.
+Veillez à utiliser ces outils régulièrement pour fixer les _code smells_, comme des _typages_ manquants, formater le code en respectant les _PSR_, etc.
 
-As this project is built with the Symfony Framework, please follow the framework's [**best practices**](https://symfony.com/doc/current/best_practices.html).
+Ce projet étant développé avec le _Framework_ Symfony, veillez également à respecter les [**best practices**](https://symfony.com/doc/current/best_practices.html) de celui-ci.
 
 #### 2.2.3 Tests
 
-This project uses [**PHPUnit**](https://phpunit.de/) tu run tests.
+Le projet utilise [**PHPUnit**](https://phpunit.de/) pour les tests.
 
-In order to keep the project stable, and with the minimum of bugs, it's required to run the tests, and that **all** tests pass, before committing and pushing to the repository.
+Pour garder le projet stable, et avec le minimum de bugs, il est impératif de lancer **tous** les tests et qu'ils passent, avant de _commit_ et de pousser les changements sur le dépôt. 
 
-Please refer to the [**README**](README.md) to know how to run the tests.
+Le [**README**](README.md) détaille les différentes étapes pour lancer les tests.
 
-It will also be appreciated that you add tests for the feature or bugfix you work on, to check that the implementation covers the most cases.
+L'ajout de tests couvrant les différents cas de la nouvelle fonctionnalité ou de la correction de bug que vous ajoutez sera bienvenu.
 
-#### 2.2.4 Commit message convention
+#### 2.2.4 Convention de nommage des commits
 
-To easily track changes, or to rollback any change made to the codebase, don't forget to commit often and early, following the [**conventional commit**](https://www.conventionalcommits.org/en/v1.0.0/) convention :
+Afin de suivre facilement les changements, ou pour annuler une modification apportée au code, pensez à faire des _commits_ réguliers, en utilisant cette convention (basée sur [**conventional commit**](https://www.conventionalcommits.org/en/v1.0.0/)) :
 
-- `feat: <commit title>` for a new feature
-- `fix: <commit title>` for a bugfix
+- `feat: <titre du commit>` pour une nouvelle fonctionnalité
+- `fix: <titre du commit>` pour une correction de bug
 
 ### 2.3 Pull Request
 
