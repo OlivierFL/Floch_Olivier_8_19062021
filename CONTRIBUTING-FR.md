@@ -78,19 +78,19 @@ Afin de suivre facilement les changements, ou pour annuler une modification appo
 
 ### 2.3 Pull Request
 
-When the feature or bugfix is done, you can make a pull request.
+Lorsque la nouvelle fonctionnalité ou la correction de bug est terminée, vous pouvez créer une _pull request_.
 
-Go to the [**Pull requests page**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/pulls), and click on the _New pull request_ button.
+Rendez-vous sur la [**page des Pull requests**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/pulls), et cliquez sur le bouton _New pull request_. 
 
-On the _pull request_ creation page, you can add a title, and a description.
+Sur la page de création de la _pull request_, vous pouvez ajouter un titre, ainsi qu'une description.
 
-In the _**description**_ field, don't forget to link the issue related to the current pull request. It is mandatory to automatically move the issue in the right column in the [**project board**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/projects/1). The syntax is : `Closes #<issue-id>`.
+Dans le champ _**description**_, il est nécessaire de mentionner l'_issue_ relative à la _pull request_. Cela permet de déplacer automatiquement l'_issue_ dans la colonne appropriée dans le [**project board**](https://github.com/OlivierFL/Floch_Olivier_8_19062021/projects/1). La syntaxe à utiliser est : `Closes #<issue-id>`.
 
-And, same as creating an [issue](#21-create-an-issue), please fill the fields on the right of the page, to add the mandatory data, like the **_Reviewers_**, the **_Labels_**, etc.
+De le même manière que lors de la création d'une [_**issue**_](#21-cration-dune-_issue_), veillez à renseigner les champs situés sur la droite de la page, pour ajouter les informations nécessaires, par exemple les **_Reviewers_**, les **_Labels_**, etc.
 
-When the request is created, [**SonarCloud**](https://sonarcloud.io/dashboard?id=OlivierFL_Floch_Olivier_8_19062021) and [**CodeClimate**](https://codeclimate.com/github/OlivierFL/Floch_Olivier_8_19062021) analyses will run automatically.
+Les analyses [**SonarCloud**](https://sonarcloud.io/dashboard?id=OlivierFL_Floch_Olivier_8_19062021) et [**CodeClimate**](https://codeclimate.com/github/OlivierFL/Floch_Olivier_8_19062021) sont lancées automatiquement lorsque la _pull request_ est créée.
 
-Please check that the results meet the following project requirements for code quality :
+Veuillez vérifier que la qualité du code est conforme aux standards du projet :
 - SonarCloud :
     - Quality Gate passed
     - 0 bugs
@@ -101,10 +101,10 @@ Please check that the results meet the following project requirements for code q
 - CodeClimate :
     - 0 issues detected
 
-Otherwise, if any of these requirements are not met, **the pull request will not be approved and merged.** Please check and fix the issues, until all the checks pass.
+Sinon, si ces standards ne sont pas respectés, la **pull request ne pourra pas être approuvée et ne sera pas fusionnée**. Veuillez apporter les corrections nécessaires, jusqu'à ce que toutes les analyses soient valides.
 
-If all is green, and the pull request has been approved by the _reviewers_, the pull request can be merged.
+Lorsque toutes les analyses sont au vert, et que la _pull request_ a été approuvée par les _reviewers_, la _pull request_ peut-être fusionnée.
 
-# 3. Thank you for contributing
+# 3. Merci pour votre contribution
 
-Thanks for reading this guide, we hope you can contribute and add new features to this project !
+Merci d'avoir lu ce guide, nous espérons que vous pourrez contribuer et apporter de nouvelles fonctionnalités à ce projet !
