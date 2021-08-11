@@ -4,6 +4,12 @@ The application is based on Symfony framework, and uses the [Security component]
 
 This documentation explains how the authentication process works inside the ToDo & Co application, where are the configurations files and which files modify to make changes to authentication.
 
+<hr>
+
+<small>**French version is available [here](Authentication-FR.md)**</small>
+
+<hr>
+
 # 1. Authentication
 
 In Symfony, the authentication process needs a _User class_, no matter how the users will authenticate, or where the data will be stored.
