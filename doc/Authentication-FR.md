@@ -12,18 +12,18 @@ Cette documentation détaille comment fonctionne le processus d'authentification
 
 # 1. Authentication
 
-In Symfony, the authentication process needs a _User class_, no matter how the users will authenticate, or where the data will be stored.
+Dans Symfony, le processus d'authentification nécessite d'avoir une classe _User_, peu importe la façon dont les utilisateurs se connectent à l'application, ou comment les données utilisateurs sont stockées.
 
-## 1.1. The User Class
+## 1.1. La classe _User_
 
-In Symfony, a user is represented by a User entity. This entity will hold the data needed to identify the user (username, email, password, etc.).
+Dans Symfony, un utilisateur est représenté par une entité _User_. Cette entité contient les propriétés nécessaires à l'identification de l'utilisateur (nom d'utilisateur, email, mot de passe, etc.).
 
-- This class must implement UserInterface.
-- The _User class_ is a Doctrine entity, and in this project all the User's data is stored in the database, in the `user` table.
-- An attribute from the _User class_ is needed to uniquely identify a user, which is the __email__ in this project. This parameter can be modified in `config/packages/security.yaml`, under the `providers` key.
-- In order to enable Symfony to check for user uniqueness (when validating forms for user creation/update for example), the `@UniqueEntity("email")` annotation must be present in the _User class_. In Symfony 5.3, a new method `getUserIdentifier()` is used to get the unique identifier for the user. In this project, this method returns the user's __email__.
-- For a security purpose, user's __password__ must be hashed before it's stored in the database. To enable password hashing in Symfony, under the `password_hashers` key in `security.yaml`, an `algorithm` key must be defined. Per default, the `auto` option is set, which lets Symfony choose the best algorithm available (in Symfony 5.3 the algorithm is _bcrypt_).
-- When password hashing is needed in the code, e.g. when creating a new user, simply inject the `UserPasswordHasherInterface` as a service with dependency injection, and then use it like this :
+- Cette classe doit implémenter _UserInterface_.
+- La classe _User_ est une entité _Doctrine_, et toutes les données des utilisateurs sont stockées dans la base de données du projet, dans la table `user`.
+- Il est nécessaire de choisir un attribut de la classe _User_, qui permet d'identifier de façon unique chaque utilisateur. Pour ce projet, il s'agit de l'**email**. Il est possible de modifier cet attribut dans le fichier `config/packages/security.yaml`, dans la clé `providers`.
+- Pour vérifier l'unicité de chaque utilisateur (par exemple lors de la validation des formulaires de création/modification de l'utilisateur), l'annotation `@UniqueEntity("email")` doit être présente dans la classe _User_. Avec Symfony 5.3, une nouvelle méthode `getUserIdentifier()` permet de récupérer l'attribut identifiant de façon unique l'utilisateur. Dans ce projet, cette méthode retourne l'**email** de l'utilisateur.
+- Dans un souci de sécurité, le mot de passe de l'utilisateur doit être _hashé_ avant d'être stocké en base de données. Pour activer le _hashage_ des mots de passe, un algorithme de _hashage_ doit être configuré dans la clé `password_hashers` du fichier `security.yaml`. Par défaut, l'option `auto` est définie, Symfony utilise le meilleur algorithme disponible (dans Symfony 5.3, il s'agit de _bcrypt_).
+- Lorsqu'il y a besoin de _hasher_ les mots de passe dans le code, par exemple lors de la création d'un nouvel utilisateur, il suffit d'utiliser `UserPasswordHasherInterface` en tant que service, en utilisant l'injection de dépendances :
 
   ```php
   $hashedPassword = $passwordHasher->hashPassword($user, $rawPassword);
