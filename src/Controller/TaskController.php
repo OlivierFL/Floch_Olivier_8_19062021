@@ -17,7 +17,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks", name="task_list")
      */
-    public function listAction(TaskRepository $repository): Response
+    public function list(TaskRepository $repository): Response
     {
         return $this->render('task/list.html.twig', ['tasks' => $repository->findAll()]);
     }
@@ -25,7 +25,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/create", name="task_create")
      */
-    public function createAction(Request $request): RedirectResponse | Response
+    public function create(Request $request): RedirectResponse | Response
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -49,7 +49,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/edit", name="task_edit")
      */
-    public function editAction(Task $task, Request $request): RedirectResponse | Response
+    public function edit(Task $task, Request $request): RedirectResponse | Response
     {
         $form = $this->createForm(TaskType::class, $task);
 
@@ -72,7 +72,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
      */
-    public function toggleTaskAction(Task $task): RedirectResponse
+    public function toggleTask(Task $task): RedirectResponse
     {
         $task->toggle(!$task->isDone());
         $this->getDoctrine()->getManager()->flush();
@@ -85,7 +85,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/{id}/delete", name="task_delete")
      */
-    public function deleteTaskAction(Task $task): RedirectResponse
+    public function deleteTask(Task $task): RedirectResponse
     {
         $this->denyAccessUnlessGranted(TaskVoter::TASK_DELETE, $task);
 
