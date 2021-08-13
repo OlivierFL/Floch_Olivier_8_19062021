@@ -43,9 +43,9 @@ Enfin, lorsque le formulaire de connexion est soumis, les _Authenticators_ de Sy
 
 ## 2. Authorisation
 
-Un processus d'authorisation est utilisé dans le but de restreindre l'accès à certaines parties du site, par exemple la section `admin`.
+Un processus d'autorisation est utilisé dans le but de restreindre l'accès à certaines parties du site, par exemple la section `admin`.
 
-Ce processus se base sur le `roles` de l'utilisateur. Dans la classe _User_, la méthode `getRoles()` retourne les rôles de l'utilisateur, cette information étant stockée en bas de données. Par défaut, si l'utilisateur n'a pas de rôle, un `ROLE_USER` lui est automatiquement attribué.
+Ce processus se base sur les `roles` de l'utilisateur. Dans la classe _User_, la méthode `getRoles()` retourne les rôles de l'utilisateur, cette information étant stockée en base de données. Par défaut, si l'utilisateur n'a pas de rôle, un `ROLE_USER` lui est automatiquement attribué.
 
 Pour répondre aux besoins de ce projet, un `ROLE_ADMIN` a été ajouté. Les utilisateurs possédant ce rôle ont accès à toutes les URLs commençant par `/users` (création d'un utilisateur, modification et suppression).
 
