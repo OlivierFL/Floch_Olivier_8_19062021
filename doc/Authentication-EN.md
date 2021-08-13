@@ -1,8 +1,8 @@
 # Introduction
 
-The application is based on Symfony framework, and uses the [Security component](https://symfony.com/doc/current/components/security.html) for the authentication part.
+The application is based on the Symfony framework, and uses the [Security component](https://symfony.com/doc/current/components/security.html) for the authentication part.
 
-This documentation explains how the authentication process works inside the ToDo & Co application, where are the configurations files and which files modify to make changes to authentication.
+This documentation explains how the authentication process works inside the ToDo & Co application, where are the configuration files and which files modify to make changes to authentication.
 
 <hr>
 
@@ -22,7 +22,7 @@ In Symfony, a user is represented by a User entity. This entity will hold the da
 - The _User class_ is a Doctrine entity, and in this project all the User's data is stored in the database, in the `user` table.
 - An attribute from the _User class_ is needed to uniquely identify a user, which is the __email__ in this project. This parameter can be modified in `config/packages/security.yaml`, under the `providers` key.
 - In order to enable Symfony to check for user uniqueness (when validating forms for user creation/update for example), the `@UniqueEntity("email")` annotation must be present in the _User class_. In Symfony 5.3, a new method `getUserIdentifier()` is used to get the unique identifier for the user. In this project, this method returns the user's __email__.
-- For a security purpose, user's __password__ must be hashed before it's stored in the database. To enable password hashing in Symfony, under the `password_hashers` key in `security.yaml`, an `algorithm` key must be defined. Per default, the `auto` option is set, which lets Symfony choose the best algorithm available (in Symfony 5.3 the algorithm is _bcrypt_).
+- For a security purpose, the user's __password__ must be hashed before it's stored in the database. To enable password hashing in Symfony, under the `password_hashers` key in `security.yaml`, an `algorithm` key must be defined. Per default, the `auto` option is set, which lets Symfony choose the best algorithm available (in Symfony 5.3 the algorithm is _bcrypt_).
 - When password hashing is needed in the code, e.g. when creating a new user, simply inject the `UserPasswordHasherInterface` as a service with dependency injection, and then use it like this :
 
   ```php
@@ -45,7 +45,7 @@ Then, when the login form is submitted, authentication will be handled by Symfon
 
 In order to restrict users access to some parts of the site, e.g. the `admin` section, an authorization process will be used.
 
-This processed is based on the `roles` of the user. Inside the _User class_, the `getRoles()` method retrieves the user's roles stored in database. If the user has no role, a default `ROLE_USER` is added automatically.
+This process is based on the `roles` of the user. Inside the _User class_, the `getRoles()` method retrieves the user's roles stored in the database. If the user has no role, a default `ROLE_USER` is added automatically.
 
 For this project another role has been added, the role `ROLE_ADMIN`. This role grants access to all the URLs starting by `/users` (users creation, update and deletion) to the users who have this role.
 
