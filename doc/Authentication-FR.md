@@ -10,7 +10,7 @@ Cette documentation détaille comment fonctionne le processus d'authentification
 
 <hr>
 
-# 1. Authentication
+# 1. Authentification
 
 Dans Symfony, le processus d'authentification nécessite d'avoir une classe _User_, peu importe la façon dont les utilisateurs se connectent à l'application, ou comment les données utilisateurs sont stockées.
 
@@ -31,38 +31,38 @@ Dans Symfony, un utilisateur est représenté par une entité _User_. Cette enti
 
 ## 1.2. Firewall
 
-User authentication in Symfony is managed by a firewall. The configuration of this firewall defines how the user will be authenticated (login form, API token, etc.), and to which parts of the application the user has access.
+L'authentification des utilisateurs dans Symfony est gérée par un _firewall_. La configuration de celui-ci permet de modifier la méthode d'authentification de l'utilisateur (formulaire, token API, etc.), et de restreindre l'accès de l'utilisateur à certaines parties de l'application.
 
-The firewall configuration is available in `security.yaml`, under the `firewalls` key.
+La configuration du _firewall_ est disponible dans le fichier `security.yaml`, dans la clé `firewalls`. 
 
-In this project, the `main` firewall defines that all the URLs of the site needs an authentication (`pattern` key) via the login form (`entry_point` key), e.g. all unauthenticated users will be redirected to the login page, to authenticate and have access to these URLs.
+Dans ce projet, le _firewall_ `main` spécifie que toutes les URLs du site nécessitent une authentification (clé `pattern`) via un formulaire de connexion (clé `entry_point`), c'est-à-dire que tous les utilisateurs non authentifiés seront redirigés vers la page de connexion, pour se connecter et ainsi pouvoir accéder au site.
 
-The `SecurityController` is in charge of rendering the login page, which contains the login form, and also to get the last authentication error (if wrong credentials were provided by the user).
+Le `SecurityController` est chargé de rendre le template de la page de connexion, qui contient le formulaire de connexion, ce contrôleur permet également de récupérer les erreurs liées à la connexion (dans le cas où l'utilisateur renseigne des informations de connexion invalides). 
 
-Then, when the login form is submitted, authentication will be handled by Symfony's _Authenticators_, so no other action is needed to authenticate users.
+Enfin, lorsque le formulaire de connexion est soumis, les _Authenticators_ de Symfony assurent l'authentification, et aucune autre action n'est requise pour authentifier les utilisateurs.
 
-## 2. Authorization
+## 2. Authorisation
 
-In order to restrict users access to some parts of the site, e.g. the `admin` section, an authorization process will be used.
+Un processus d'authorisation est utilisé dans le but de restreindre l'accès à certaines parties du site, par exemple la section `admin`.
 
-This processed is based on the `roles` of the user. Inside the _User class_, the `getRoles()` method retrieves the user's roles stored in database. If the user has no role, a default `ROLE_USER` is added automatically.
+Ce processus se base sur le `roles` de l'utilisateur. Dans la classe _User_, la méthode `getRoles()` retourne les rôles de l'utilisateur, cette information étant stockée en bas de données. Par défaut, si l'utilisateur n'a pas de rôle, un `ROLE_USER` lui est automatiquement attribué.
 
-For this project another role has been added, the role `ROLE_ADMIN`. This role grants access to all the URLs starting by `/users` (users creation, update and deletion) to the users who have this role.
+Pour répondre aux besoins de ce projet, un `ROLE_ADMIN` a été ajouté. Les utilisateurs possédant ce rôle ont accès à toutes les URLs commençant par `/users` (création d'un utilisateur, modification et suppression).
 
-If needed, it's possible to add new roles when creating/updating users, the only mandatory rule is that a role __must__ start with `ROLE_`. After that part, any string will be valid (e.g. `ROLE_TASK_UPDATE`).
+Si besoin, il est possible d'ajouter des nouveaux rôles lors de la création/modification des utilisateurs, le seul impératif est que le rôle **doit** commencer par `ROLE_`. Il est ensuite possible de compléter avec n'importe quelle chaîne de caractères (par exemple `ROLE_TASK_UPDATE`). 
 
-To deny access to some URLs of the site, there are two ways :
+Pour restreindre l'accès à certaines URLs du site, il y a deux façons possibles :
 
-- the `access_control` key in `security.yaml`
-- in `Controllers` or in a _Twig_ template
+- la clé `access_control` dans le fichier `security.yaml`
+- dans les `Controllers` ou dans un template _Twig_.
 
-For this project, the two options have been used, depending on the needs.
+Pour ce projet, les deux options ont été utilisées, en fonction des besoins.
 
-The `access_control` key in `security.yaml` is used to grant access to users who have the `ROLE_ADMIN` role to all URLs starting by `/users`, via the `- { path: ^/users, roles: ROLE_ADMIN }` option.
+La clé `access_control` dans le fichier `security.yaml` est utilisée pour accorder l'accès à toutes les URLs commençant par `/users` à tous les utilisateurs ayant le rôle `ROLE_ADMIN`, en utilisant l'option `- { path: ^/users, roles: ROLE_ADMIN }`.
 
-In the code, it's possible to use `$this->denyAccessUnlessGranted(<role>)` in a Controller, to deny access to a route for example.
+Dans le code, il est possible d'utiliser `$this->denyAccessUnlessGranted(<role>)` dans un contrôleur, pour restreindre l'accès pour une route en particulier.
 
-Or, in a Twig template it's possible to use :
+Ou, dans un template _Twig_, il est possible d'utiliser :
 
 ```html
 {% if is_granted('ROLE_ADMIN') %}
@@ -70,12 +70,12 @@ Or, in a Twig template it's possible to use :
 {% endif %}
 ```
 
-to show a link only if the user has the role `ROLE_ADMIN`
+pour afficher un lien seulement si l'utilisateur possède le rôle `ROLE_ADMIN`.
 
-No matter the way used, if the user does not have access to the section of the site, a 403 HTTP error will be sent.
+Peu importe la méthode utilisée, si l'utilisateur ne possède pas les droits d'accès suffisants, une erreur HTTP 403 sera renvoyée.
 
-# Learn more
+# En savoir plus
 
-- [The Security documentation](https://symfony.com/doc/current/security.html)
-- [The Security component](https://symfony.com/doc/current/components/security.html)
-- [The Authentication part of the security component](https://symfony.com/doc/current/components/security/authentication.html)
+- [La documentation Security](https://symfony.com/doc/current/security.html)
+- [Le composant Security](https://symfony.com/doc/current/components/security.html)
+- [La section Authentification du composant Security](https://symfony.com/doc/current/components/security/authentication.html)
